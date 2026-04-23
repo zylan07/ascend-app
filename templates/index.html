@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Recommender</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>🎓 Course Recommendation System</h1>
+
+<div class="form-box">
+
+    <input type="text" id="interest" placeholder="Enter Interest (Data Science, Finance...)">
+
+    <input type="text" id="price" placeholder="Price (Free or amount)">
+
+    <input type="number" id="duration" placeholder="Max Duration (hours)">
+
+    <input type="text" id="level" placeholder="Level (Beginner/Intermediate/Expert)">
+
+    <button onclick="getRecommendations()">Get Recommendations</button>
+
+</div>
+
+<div id="results"></div>
+
+<script src="/static/script.js"></script>
+
+</body>
+</html>
