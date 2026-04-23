@@ -4,4 +4,7 @@ fastapi
 uvicorn
 pydantic
 jinja2
-sentence-transformers
+
+# lightweight transformer without GPU torch
+sentence-transformers==2.2.2
+torch==2.0.1
