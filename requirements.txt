@@ -4,8 +4,4 @@ fastapi
 uvicorn
 pydantic
 jinja2
-
-# Force CPU version of torch
-torch==2.2.2+cpu -f https://download.pytorch.org/whl/torch_stable.html
-
 sentence-transformers
