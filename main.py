@@ -1,6 +1,6 @@
 import pandas as pd
 import pickle
-from sentence_transformers import SentenceTransformer
+
 from sklearn.metrics.pairwise import cosine_similarity
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
@@ -19,14 +19,7 @@ df = pd.read_pickle('courses.pkl')
 with open('embeddings.pkl', 'rb') as f:
     embeddings = pickle.load(f)
 
-model = None
 
-def get_model():
-    global model
-    if model is None:
-        from sentence_transformers import SentenceTransformer
-        model = SentenceTransformer('all-MiniLM-L6-v2')
-    return model
 
 # ==============================
 # FASTAPI APP
@@ -91,7 +84,7 @@ def compute_quality_score(row, price_pref):
     return score
 
 def recommend_personalized(interest, price_pref, duration_pref, level_pref, top_n=5):
-    model = get_model()
+    
     interest = interest.lower()
     
     if isinstance(price_pref, (float, int)):
@@ -146,8 +139,17 @@ def recommend_personalized(interest, price_pref, duration_pref, level_pref, top_
         return []
 
     # Semantic similarity
-    interest_embedding = model.encode([interest])
-    filtered_embeddings = embeddings[filtered_df.index]
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    vectorizer = TfidfVectorizer()
+
+    # Combine all course text + user input
+    all_text = df['combined'].fillna("").tolist() + [interest]
+
+    vectors = vectorizer.fit_transform(all_text)
+
+    interest_embedding = vectors[-1]
+    filtered_embeddings = vectors[:-1][filtered_df.index]
 
     sim_scores = cosine_similarity(interest_embedding, filtered_embeddings)[0]
 
