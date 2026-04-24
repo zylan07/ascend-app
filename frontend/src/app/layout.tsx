@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Course Recommender",
-  description: "AI-powered course recommendations",
+  title: "Ascend",
+  description: "Align your skills with the future",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
