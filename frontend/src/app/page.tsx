@@ -44,11 +44,7 @@ interface Course {
 
 const SUGGESTIONS = ["Machine Learning", "Data Science", "Web Development", "AI Basics", "Python"];
 const LEVELS = ["All Levels", "Beginner", "Intermediate", "Advanced"];
-const PLATFORMS = (q: string) => [
-  { label: "Google",   url: `https://www.google.com/search?q=${q}` },
-  { label: "Coursera", url: `https://www.coursera.org/search?query=${q}` },
-  { label: "Udemy",    url: `https://www.udemy.com/courses/search/?q=${q}` },
-];
+
 
 const RELEVANCE_SCORES = [98, 92, 85, 76, 68, 62, 55, 48];
 const getRelevance = (i: number) => RELEVANCE_SCORES[i] ?? Math.max(40, 68 - (i - 4) * 4);
@@ -155,61 +151,7 @@ function MatchCircle({ score }: { score: number }) {
 
 // ─── PlatformDropdown ──────────────────────────────────────────────────────
 
-function PlatformDropdown({ title }: { title: string }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const q = encodeURIComponent(title + " course");
-  const platforms = PLATFORMS(q);
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  return (
-    <div className="relative inline-flex shrink-0 overflow-visible" ref={ref}>
-      <a
-        href={platforms[0].url}
-        target="_blank"
-        rel="noopener noreferrer"
-        title="Search this course online"
-        className="group inline-flex items-center gap-2 h-10 px-5 bg-slate-800 hover:bg-slate-700 active:scale-[0.98] text-slate-200 text-sm font-medium rounded-l-xl border border-slate-700 border-r-0 transition-all duration-200"
-      >
-        Search this course online
-        <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-px group-hover:-translate-y-px transition-transform" />
-      </a>
-
-      <button
-        onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
-        className="h-10 w-9 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 rounded-r-xl transition-colors duration-200 active:scale-[0.98]"
-        aria-label="More platforms"
-      >
-        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
-      </button>
-
-      {open && (
-        <div className="absolute right-0 bottom-full mb-2 w-44 max-h-[200px] overflow-y-auto bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-[60] animate-in fade-in slide-in-from-bottom-2 duration-200">
-          {platforms.map((p) => (
-            <a
-              key={p.label}
-              href={p.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-700 transition-colors duration-200"
-            >
-              <ExternalLink className="w-3.5 h-3.5 opacity-40 shrink-0" />
-              {p.label}
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ─── HowItWorks ────────────────────────────────────────────────────────────
 
@@ -549,7 +491,15 @@ function CourseModal({ course, interest, onClose }: {
             <span className="text-2xl font-black text-slate-200">{course.relevanceScore}</span>
             <span className="text-sm font-medium text-slate-600">% Fit</span>
           </div>
-          <PlatformDropdown title={course.title} />
+          <a
+  href={`https://www.google.com/search?q=${encodeURIComponent(course.title + " course")}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center gap-2 h-10 px-5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium rounded-xl border border-slate-700 transition-all duration-200 active:scale-[0.98]"
+>
+  Start Learning
+  <ExternalLink className="w-3.5 h-3.5" />
+</a>
         </div>
       </div>
     </div>
