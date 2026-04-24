@@ -28,17 +28,12 @@ app = FastAPI(title="Course Recommendation API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
-        "https://ascend-app-zeta.vercel.app",
-    ],
+    allow_origins=["*"],   # TEMPORARY FIX (IMPORTANT)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 templates = Jinja2Templates(directory="templates")
 
@@ -207,9 +202,9 @@ def recommend_personalized(interest, price_pref, duration_pref, level_pref, top_
 # ==============================
 # ROUTES
 # ==============================
-@app.get('/', response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+@app.get("/")
+def home():
+    return {"message": "API is running"}
 
 @app.post('/recommend')
 async def recommend(req: RecommendRequest):
